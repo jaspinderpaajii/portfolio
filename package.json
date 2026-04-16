@@ -3,12 +3,12 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "install:all": "npm.cmd --prefix server install && npm.cmd --prefix client install",
-    "dev": "concurrently \"npm.cmd --prefix server run dev\" \"npm.cmd --prefix client run dev\"",
-    "dev:server": "npm.cmd --prefix server run dev",
-    "dev:client": "npm.cmd --prefix client run dev",
-    "build": "npm.cmd --prefix client run build",
-    "seed:admin": "npm.cmd --prefix server run seed:admin"
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "dev": "concurrently \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "build": "npm --prefix client run build",
+    "seed:admin": "npm --prefix server run seed:admin"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
