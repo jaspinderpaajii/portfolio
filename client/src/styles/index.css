@@ -32,7 +32,7 @@ body {
   }
 
   .glass-panel {
-    @apply rounded-[2rem] border border-white/10 backdrop-blur-xl;
+    @apply rounded-[2rem] border border-white/10 backdrop-blur-sm;
     background:
       linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
       rgba(9, 12, 18, 0.72);
@@ -99,15 +99,14 @@ body {
     linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 72px 72px;
-  mask-image: radial-gradient(circle at center, black 42%, transparent 84%);
+  opacity: 0.72;
 }
 
 .noise-overlay {
   background-image:
     linear-gradient(120deg, rgba(255, 255, 255, 0.02) 0%, transparent 22%, rgba(255, 255, 255, 0.02) 45%, transparent 70%),
     linear-gradient(0deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0.015));
-  mix-blend-mode: screen;
-  opacity: 0.55;
+  opacity: 0.18;
 }
 
 .section-frame {
@@ -155,16 +154,16 @@ body {
 }
 
 .interactive-tilt:hover {
-  transform: translateY(-6px) perspective(1200px) rotateX(3deg) rotateY(-3deg);
+  transform: translateY(-4px) scale(1.01);
   border-color: rgba(255, 255, 255, 0.18);
   box-shadow:
-    0 30px 90px rgba(0, 0, 0, 0.38),
+    0 18px 48px rgba(0, 0, 0, 0.28),
     0 0 0 1px rgba(var(--accent-rgb), 0.14);
 }
 
 .hero-glow {
   background: radial-gradient(circle at center, rgba(var(--accent-rgb), 0.38), rgba(var(--accent-rgb), 0.12) 35%, transparent 68%);
-  filter: blur(12px);
+  filter: blur(8px);
 }
 
 .hero-depth {
@@ -183,8 +182,8 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 2rem;
-  filter: blur(8px);
-  opacity: 0.78;
+  filter: blur(6px);
+  opacity: 0.62;
   pointer-events: none;
 }
 
@@ -200,8 +199,7 @@ body {
     linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
   background-size: 28px 28px;
   transform: perspective(900px) rotateX(78deg) translateZ(-20px);
-  opacity: 0.35;
-  mask-image: radial-gradient(circle at center, black 36%, transparent 82%);
+  opacity: 0.24;
 }
 
 .hero-orbit {
@@ -219,7 +217,7 @@ body {
   margin-left: -10rem;
   margin-top: -10rem;
   transform: translateZ(8px) rotateX(74deg);
-  opacity: 0.48;
+  opacity: 0.34;
   animation: orbit-spin 16s linear infinite;
 }
 
@@ -229,7 +227,7 @@ body {
   margin-left: -7.5rem;
   margin-top: -7.5rem;
   transform: translateZ(28px) rotateY(72deg);
-  opacity: 0.24;
+  opacity: 0.16;
   animation: orbit-spin-reverse 22s linear infinite;
 }
 
@@ -251,8 +249,8 @@ body {
   background:
     radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.35), transparent 26%),
     radial-gradient(circle at center, rgba(var(--accent-rgb), 0.32), transparent 62%);
-  filter: blur(18px);
-  opacity: 0.78;
+  filter: blur(12px);
+  opacity: 0.62;
 }
 
 .hero-orb-shell {
@@ -265,8 +263,8 @@ body {
     linear-gradient(145deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.03));
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow:
-    inset 0 0 44px rgba(255, 255, 255, 0.08),
-    0 34px 80px rgba(0, 0, 0, 0.42);
+    inset 0 0 28px rgba(255, 255, 255, 0.08),
+    0 24px 56px rgba(0, 0, 0, 0.32);
   overflow: hidden;
   animation: float-slow 8s ease-in-out infinite;
 }
@@ -304,9 +302,9 @@ body {
     linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03)),
     rgba(7, 10, 16, 0.74);
   box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.28),
+    0 16px 36px rgba(0, 0, 0, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(8px);
   transition: transform 240ms ease;
 }
 
@@ -357,10 +355,9 @@ body {
 .motion-reveal {
   opacity: 0;
   transition:
-    opacity 720ms ease,
-    transform 720ms cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 560ms ease,
+    transform 560ms cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: var(--reveal-delay, 0ms);
-  will-change: opacity, transform;
 }
 
 .motion-reveal[data-reveal="up"] {
@@ -449,6 +446,22 @@ body {
 
 .animate-drift {
   animation: drift 12s ease-in-out infinite;
+}
+
+@media (pointer: coarse) {
+  .interactive-tilt:hover {
+    transform: none;
+    box-shadow:
+      0 12px 28px rgba(0, 0, 0, 0.22),
+      0 0 0 1px rgba(var(--accent-rgb), 0.1);
+  }
+
+  .hero-orbit-one,
+  .hero-orbit-two,
+  .animate-drift,
+  .animate-float-slow {
+    animation: none !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

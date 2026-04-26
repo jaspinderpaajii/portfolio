@@ -20,14 +20,14 @@ function PublicLayout() {
           <div className="grid-fade absolute inset-0" />
         </div>
         <div className="noise-overlay absolute inset-0" />
-        <div className="hero-glow animate-drift absolute left-[-8rem] top-24 h-72 w-72 rounded-full opacity-60" />
+        <div className="hero-glow animate-drift absolute left-[-8rem] top-24 h-72 w-72 rounded-full opacity-38" />
         <div
-          className="absolute right-[-6rem] top-36 h-80 w-80 rounded-full opacity-30 blur-3xl"
-          style={{ background: "radial-gradient(circle at center, rgba(118, 188, 255, 0.32), transparent 68%)" }}
+          className="absolute right-[-6rem] top-36 h-80 w-80 rounded-full opacity-16"
+          style={{ background: "radial-gradient(circle at center, rgba(118, 188, 255, 0.22), transparent 68%)" }}
         />
         <div
-          className="absolute bottom-[-8rem] left-1/3 h-96 w-96 rounded-full opacity-30 blur-3xl"
-          style={{ background: "radial-gradient(circle at center, rgba(var(--accent-rgb), 0.24), transparent 70%)" }}
+          className="absolute bottom-[-8rem] left-1/3 h-96 w-96 rounded-full opacity-14"
+          style={{ background: "radial-gradient(circle at center, rgba(var(--accent-rgb), 0.18), transparent 70%)" }}
         />
       </div>
       <Navbar />
