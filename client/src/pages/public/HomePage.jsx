@@ -1,10 +1,13 @@
-import { ArrowRight, Download, Sparkles } from "lucide-react";
+import { ArrowRight, Download } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchSiteSnapshot } from "../../api/publicApi.js";
+import HeroDepthScene from "../../components/public/HeroDepthScene.jsx";
+import MotionReveal from "../../components/public/MotionReveal.jsx";
 import ProjectCard from "../../components/public/ProjectCard.jsx";
 import SectionIntro from "../../components/public/SectionIntro.jsx";
 import VideoCard from "../../components/public/VideoCard.jsx";
+import { applyAccentTheme } from "../../theme.js";
 
 function HomePage() {
   const [snapshot, setSnapshot] = useState(null);
@@ -17,10 +20,7 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    const accent = snapshot?.sections?.settings?.data?.accent;
-    if (accent) {
-      document.documentElement.style.setProperty("--accent", accent);
-    }
+    applyAccentTheme(snapshot?.sections?.settings?.data?.accent);
     document.title = snapshot?.sections?.settings?.data?.seoTitle || "Aryan Verma | Portfolio";
   }, [snapshot]);
 
@@ -34,65 +34,77 @@ function HomePage() {
   const resumeLabel = settings?.resumeLabel || "Download Resume";
 
   if (loading) {
-    return <div className="shell py-24 text-white/60">Loading portfolio...</div>;
+    return (
+      <div className="shell py-24">
+        <div className="glass-panel p-8 text-white/60">Loading portfolio...</div>
+      </div>
+    );
   }
 
   const sectionBlocks = {
     projects: (
-      <section className="shell mt-24" key="projects">
+      <MotionReveal as="section" className="shell mt-24" key="projects" delay={80}>
         <SectionIntro
           eyebrow="Selected Work"
           title="Projects shaped with clarity and momentum."
-          body="This is a selection of projects I’ve built to explore ideas, improve my problem-solving, and turn what I learn into experiences that feel clean, useful, and intentional."
+          body="This is a selection of projects I've built to explore ideas, improve my problem-solving, and turn what I learn into experiences that feel clean, useful, and intentional."
         />
         <div className="mt-10 grid gap-5 lg:grid-cols-3">
           {snapshot?.featuredProjects?.length ? (
-            snapshot.featuredProjects.map((project) => <ProjectCard key={project._id} project={project} />)
+            snapshot.featuredProjects.map((project, index) => (
+              <MotionReveal key={project._id} delay={index * 90} distance={24} origin="scale">
+                <ProjectCard project={project} />
+              </MotionReveal>
+            ))
           ) : (
             <div className="glass-panel p-8 text-white/55">Add featured projects from the admin dashboard to populate this section.</div>
           )}
         </div>
-      </section>
+      </MotionReveal>
     ),
     showcase: (
-      <section className="shell mt-24" key="showcase">
+      <MotionReveal as="section" className="shell mt-24" key="showcase" delay={120}>
         <SectionIntro
           eyebrow="Creative"
           title="Motion, rhythm, and storytelling in a cleaner frame."
-          body="Here I’ve brought together both edits and visuals that reflect how I think about pacing, mood, framing, and storytelling. It’s a space for the creative work I want people to experience together."
+          body="Here I've brought together both edits and visuals that reflect how I think about pacing, mood, framing, and storytelling. It's a space for the creative work I want people to experience together."
         />
         <div className="mt-10 grid gap-5 lg:grid-cols-2">
           {snapshot?.featuredVideos?.length ? (
-            snapshot.featuredVideos.map((item) => <VideoCard key={item._id} item={item} />)
+            snapshot.featuredVideos.map((item, index) => (
+              <MotionReveal key={item._id} delay={index * 90} distance={24} origin="scale">
+                <VideoCard item={item} />
+              </MotionReveal>
+            ))
           ) : (
             <div className="glass-panel p-8 text-white/55">
-              No creative pieces yet. Add videos or photos from the admin panel and they’ll appear here automatically.
+              No creative pieces yet. Add videos or photos from the admin panel and they'll appear here automatically.
             </div>
           )}
         </div>
-      </section>
+      </MotionReveal>
     ),
     skills: (
-      <section className="shell mt-24" key="skills">
+      <MotionReveal as="section" className="shell mt-24" key="skills" delay={160}>
         <SectionIntro
           eyebrow="Capabilities"
           title={skills?.title || "Core capabilities."}
-          body="These are the skills I’ve been building through projects, practice, and continuous learning, and they shape the way I approach both development and creative work."
+          body="These are the skills I've been building through projects, practice, and continuous learning, and they shape the way I approach both development and creative work."
         />
         <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-          {(skills?.items || []).map((item) => (
-            <div key={item} className="glass-panel p-5 text-sm text-white/70">
-              {item}
-            </div>
+          {(skills?.items || []).map((item, index) => (
+            <MotionReveal key={item} delay={index * 70} distance={22} origin="up">
+              <div className="glass-panel p-5 text-sm text-white/70">{item}</div>
+            </MotionReveal>
           ))}
         </div>
-      </section>
+      </MotionReveal>
     )
   };
 
   return (
     <>
-      <section className="shell relative pt-14 md:pt-20">
+      <MotionReveal as="section" className="shell relative pt-14 md:pt-20" origin="scale">
         <div className="absolute right-0 top-10 hidden h-72 w-72 rounded-full bg-[var(--accent)]/20 blur-3xl md:block" />
         <div className="grid items-end gap-12 lg:grid-cols-[1.25fr,0.75fr]">
           <div>
@@ -122,29 +134,16 @@ function HomePage() {
             </div>
           </div>
 
-          <div className="glass-panel relative overflow-hidden p-6 md:p-8">
-            <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent" />
-            <div className="flex items-center gap-3 text-sm text-white/55">
-              <Sparkles size={16} className="text-[var(--accent)]" />
-              {home?.availability}
-            </div>
-            <div className="mt-8 space-y-4">
-              {(home?.heroStats || []).map((stat) => (
-                <div key={stat.label} className="flex items-end justify-between gap-4 border-b border-white/10 pb-4">
-                  <span className="text-sm uppercase tracking-[0.18em] text-white/35">{stat.label}</span>
-                  <span className="font-display text-4xl text-white">{stat.value}</span>
-                </div>
-              ))}
-            </div>
-            <div className="mt-8 rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-5">
-              <p className="text-xs uppercase tracking-[0.24em] text-white/35">About Snapshot</p>
-              <p className="mt-3 text-sm leading-7 text-white/65">{about?.body}</p>
-            </div>
-          </div>
+          <HeroDepthScene
+            availability={home?.availability}
+            heroStats={home?.heroStats}
+            aboutBody={about?.body}
+            marquee={home?.marquee}
+          />
         </div>
-      </section>
+      </MotionReveal>
 
-      <section className="shell mt-16 overflow-hidden">
+      <MotionReveal as="section" className="shell mt-16 overflow-hidden" delay={120}>
         <div className="glass-panel flex flex-wrap gap-3 px-4 py-4 md:px-6">
           {(home?.marquee || []).map((item) => (
             <div key={item} className="rounded-full border border-white/10 px-4 py-2 text-sm text-white/55">
@@ -152,22 +151,22 @@ function HomePage() {
             </div>
           ))}
         </div>
-      </section>
+      </MotionReveal>
 
-      <section className="shell mt-24 grid gap-10 lg:grid-cols-[1fr,1fr]">
+      <MotionReveal as="section" className="shell mt-24 grid gap-10 lg:grid-cols-[1fr,1fr]" delay={140}>
         <SectionIntro eyebrow="About" title={about?.title || "About"} body={about?.body} />
         <div className="grid gap-4">
-          {(about?.highlights || []).map((item) => (
-            <div key={item} className="glass-panel p-5 text-sm leading-7 text-white/65">
-              {item}
-            </div>
+          {(about?.highlights || []).map((item, index) => (
+            <MotionReveal key={item} delay={index * 80} distance={24} origin="right">
+              <div className="glass-panel p-5 text-sm leading-7 text-white/65">{item}</div>
+            </MotionReveal>
           ))}
         </div>
-      </section>
+      </MotionReveal>
 
       {sectionOrder.map((key) => sectionBlocks[key]).filter(Boolean)}
 
-      <section className="shell mt-24 pb-10">
+      <MotionReveal as="section" className="shell mt-24 pb-10" delay={180}>
         <div className="glass-panel grid gap-8 p-8 lg:grid-cols-[1fr,0.7fr] lg:items-end lg:p-10">
           <div>
             <p className="eyebrow">Contact</p>
@@ -183,7 +182,7 @@ function HomePage() {
             </Link>
           </div>
         </div>
-      </section>
+      </MotionReveal>
     </>
   );
 }

@@ -16,7 +16,11 @@ function NavItems({ onClick }) {
       to={link.path}
       onClick={onClick}
       className={({ isActive }) =>
-        `text-sm transition ${isActive ? "text-white" : "text-white/60 hover:text-white"}`
+        `rounded-full px-4 py-2 text-sm transition ${
+          isActive
+            ? "border border-white/10 bg-white/[0.08] text-white shadow-[0_0_0_1px_rgba(255,255,255,0.04)]"
+            : "text-white/60 hover:bg-white/[0.05] hover:text-white"
+        }`
       }
     >
       {link.label}
@@ -37,13 +41,13 @@ function Navbar() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-30 border-b border-white/5 bg-ink-950/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 border-b border-white/5 bg-[#07090d]/55 backdrop-blur-2xl">
       <div className="shell flex items-center justify-between py-5">
         <Link to="/" className="font-display text-3xl tracking-tight text-white">
           {siteName}
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-3 rounded-full border border-white/10 bg-white/[0.03] p-2 md:flex">
           <NavItems />
           <Link to="/contact" className="public-button py-2.5">
             Start a conversation
@@ -61,7 +65,7 @@ function Navbar() {
 
       {open ? (
         <div className="shell pb-5 md:hidden">
-          <div className="glass-panel space-y-4 p-5">
+          <div className="glass-panel section-frame space-y-4 p-5">
             <div className="flex flex-col gap-3">
               <NavItems onClick={() => setOpen(false)} />
             </div>
