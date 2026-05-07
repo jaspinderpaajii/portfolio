@@ -2,6 +2,7 @@ import { ArrowRight, Download } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchSiteSnapshot } from "../../api/publicApi.js";
+import FeaturedCarousel from "../../components/public/FeaturedCarousel.jsx";
 import HeroDepthScene from "../../components/public/HeroDepthScene.jsx";
 import MotionReveal from "../../components/public/MotionReveal.jsx";
 import ProjectCard from "../../components/public/ProjectCard.jsx";
@@ -49,17 +50,16 @@ function HomePage() {
           title="Projects shaped with clarity and momentum."
           body="This is a selection of projects I've built to explore ideas, improve my problem-solving, and turn what I learn into experiences that feel clean, useful, and intentional."
         />
-        <div className="mt-10 grid gap-5 lg:grid-cols-3">
-          {snapshot?.featuredProjects?.length ? (
-            snapshot.featuredProjects.map((project, index) => (
-              <MotionReveal key={project._id} delay={index * 90} distance={24} origin="scale">
-                <ProjectCard project={project} />
-              </MotionReveal>
-            ))
-          ) : (
-            <div className="glass-panel p-8 text-white/55">Add featured projects from the admin dashboard to populate this section.</div>
-          )}
-        </div>
+        <FeaturedCarousel
+          items={snapshot?.featuredProjects || []}
+          itemLabel="project"
+          emptyState={
+            <div className="glass-panel mt-10 p-8 text-white/55">
+              Add featured projects from the admin dashboard to populate this section.
+            </div>
+          }
+          renderItem={(project) => <ProjectCard project={project} className="h-full" />}
+        />
       </MotionReveal>
     ),
     showcase: (
@@ -69,19 +69,16 @@ function HomePage() {
           title="Motion, rhythm, and storytelling in a cleaner frame."
           body="Here I've brought together both edits and visuals that reflect how I think about pacing, mood, framing, and storytelling. It's a space for the creative work I want people to experience together."
         />
-        <div className="mt-10 grid gap-5 lg:grid-cols-2">
-          {snapshot?.featuredVideos?.length ? (
-            snapshot.featuredVideos.map((item, index) => (
-              <MotionReveal key={item._id} delay={index * 90} distance={24} origin="scale">
-                <VideoCard item={item} />
-              </MotionReveal>
-            ))
-          ) : (
-            <div className="glass-panel p-8 text-white/55">
+        <FeaturedCarousel
+          items={snapshot?.featuredVideos || []}
+          itemLabel="creative piece"
+          emptyState={
+            <div className="glass-panel mt-10 p-8 text-white/55">
               No creative pieces yet. Add videos or photos from the admin panel and they'll appear here automatically.
             </div>
-          )}
-        </div>
+          }
+          renderItem={(item) => <VideoCard item={item} className="h-full" />}
+        />
       </MotionReveal>
     ),
     skills: (
