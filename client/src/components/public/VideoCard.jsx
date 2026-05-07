@@ -1,7 +1,41 @@
-function VideoCard({ item, className = "", priority = false, onOpen }) {
+function VideoCard({ item, className = "", priority = false, onOpen, variant = "default" }) {
   const assetType = item?.assetType === "photo" ? "photo" : item?.video?.url ? "video" : item?.image?.url ? "photo" : "video";
   const imageUrl = item?.image?.url || item?.thumbnail?.url;
   const description = item?.description || "A creative entry that brings together the visual work I want to highlight.";
+  const isMediaOnly = variant === "media";
+
+  if (isMediaOnly) {
+    return (
+      <article className={`glass-panel section-frame interactive-tilt group overflow-hidden p-3 md:p-4 ${className}`}>
+        <div className="featured-media-card relative overflow-hidden rounded-[1.65rem] border border-white/10 bg-black">
+          {imageUrl ? (
+            <img src={imageUrl} alt={item.title} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]" />
+          ) : (
+            <div className="flex h-full items-center justify-center bg-white/5 text-sm text-white/45">
+              Upload a thumbnail or photo from the CMS
+            </div>
+          )}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#07090d] via-transparent to-transparent opacity-80" />
+          <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+            <span className="rounded-full border border-white/10 bg-black/35 px-3 py-1 text-[0.68rem] uppercase tracking-[0.22em] text-white/70 backdrop-blur-md">
+              {item.category}
+            </span>
+            <span className="rounded-full border border-white/10 bg-black/35 px-3 py-1 text-[0.68rem] uppercase tracking-[0.22em] text-white/70 backdrop-blur-md">
+              {assetType}
+            </span>
+          </div>
+          {onOpen ? (
+            <button
+              type="button"
+              className="absolute inset-0 z-10"
+              aria-label={`Open ${item.title}`}
+              onClick={() => onOpen(item)}
+            />
+          ) : null}
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article className={`glass-panel section-frame interactive-tilt group overflow-hidden ${className}`}>

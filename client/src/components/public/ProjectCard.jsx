@@ -12,12 +12,57 @@ function normalizeExternalUrl(url) {
   return `https://${url}`;
 }
 
-function ProjectCard({ project, className = "" }) {
+function ProjectCard({ project, className = "", variant = "default" }) {
   const liveUrl = normalizeExternalUrl(project?.links?.live);
   const githubUrl = normalizeExternalUrl(project?.links?.github);
   const caseStudyUrl = normalizeExternalUrl(project?.links?.caseStudy);
   const primaryUrl = liveUrl || caseStudyUrl || githubUrl;
   const coverImageUrl = project?.coverImage?.url;
+  const isMediaOnly = variant === "media";
+
+  if (isMediaOnly) {
+    const MediaTag = primaryUrl ? "a" : "div";
+
+    return (
+      <article className={`glass-panel section-frame interactive-tilt group relative overflow-hidden p-3 md:p-4 ${className}`}>
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(var(--accent-rgb),0.92)] to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />
+        <MediaTag
+          {...(primaryUrl
+            ? {
+                href: primaryUrl,
+                target: "_blank",
+                rel: "noreferrer",
+                "aria-label": `Open ${project.title}`
+              }
+            : {})}
+          className="featured-media-card relative block overflow-hidden rounded-[1.65rem] border border-white/10 bg-white/5"
+        >
+          {coverImageUrl ? (
+            <>
+              <img
+                src={coverImageUrl}
+                alt={project.title}
+                className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#07090d] via-transparent to-transparent opacity-75" />
+            </>
+          ) : (
+            <div className="flex h-full items-end bg-gradient-to-br from-white/10 via-white/[0.04] to-[rgba(var(--accent-rgb),0.18)] p-5">
+              <p className="text-lg font-medium text-white/80">{project.title}</p>
+            </div>
+          )}
+          <div className="absolute left-4 top-4 rounded-full border border-white/10 bg-black/35 px-3 py-1 text-[0.68rem] uppercase tracking-[0.22em] text-white/70 backdrop-blur-md">
+            {project.category}
+          </div>
+          {primaryUrl ? (
+            <div className="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-black/35 text-white/72 backdrop-blur-md transition group-hover:border-[rgba(var(--accent-rgb),0.55)] group-hover:text-white">
+              <ArrowUpRight size={18} />
+            </div>
+          ) : null}
+        </MediaTag>
+      </article>
+    );
+  }
 
   return (
     <article className={`glass-panel section-frame interactive-tilt group relative overflow-hidden p-5 md:p-6 ${className}`}>

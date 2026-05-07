@@ -206,6 +206,10 @@ body {
   min-height: 100%;
 }
 
+.featured-media-card {
+  aspect-ratio: 16 / 10;
+}
+
 .featured-carousel-progress {
   height: 4px;
   width: min(20rem, 100%);
