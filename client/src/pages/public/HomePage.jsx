@@ -58,7 +58,7 @@ function HomePage() {
               Add featured projects from the admin dashboard to populate this section.
             </div>
           }
-          renderItem={(project) => <ProjectCard project={project} className="h-full" />}
+          renderItem={(project) => <ProjectCard project={project} className="h-full featured-carousel-card" />}
         />
       </MotionReveal>
     ),
@@ -77,7 +77,7 @@ function HomePage() {
               No creative pieces yet. Add videos or photos from the admin panel and they'll appear here automatically.
             </div>
           }
-          renderItem={(item) => <VideoCard item={item} className="h-full" />}
+          renderItem={(item) => <VideoCard item={item} className="h-full featured-carousel-card" />}
         />
       </MotionReveal>
     ),

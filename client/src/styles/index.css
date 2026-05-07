@@ -168,8 +168,58 @@ body {
   will-change: transform;
 }
 
+.featured-carousel-shell {
+  position: relative;
+}
+
+.featured-carousel-glow {
+  position: absolute;
+  inset: auto -12% -30% auto;
+  width: 22rem;
+  height: 22rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.18), transparent 68%);
+  filter: blur(24px);
+  pointer-events: none;
+  opacity: 0.88;
+}
+
+.featured-carousel-stage {
+  position: relative;
+  border-radius: 1.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)),
+    rgba(8, 11, 16, 0.44);
+  padding: 0.7rem;
+}
+
 .featured-carousel-slide {
   min-width: 100%;
+}
+
+.featured-carousel-slide-inner {
+  min-height: 100%;
+}
+
+.featured-carousel-card {
+  min-height: 100%;
+}
+
+.featured-carousel-progress {
+  height: 4px;
+  width: min(20rem, 100%);
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.featured-carousel-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(var(--accent-rgb), 0.95), rgba(255, 255, 255, 0.85));
+  transition: width 320ms ease;
 }
 
 .carousel-nav-button {
@@ -200,18 +250,22 @@ body {
     rgba(255, 255, 255, 0.03);
 }
 
+.featured-carousel-rail {
+  display: grid;
+  gap: 0.75rem;
+}
+
 .carousel-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
   max-width: 100%;
-  border-radius: 999px;
+  min-height: 4.4rem;
+  border-radius: 1.3rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.02);
-  padding: 0.72rem 1rem;
+  padding: 0.72rem;
   font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
   color: rgba(255, 255, 255, 0.5);
   transition:
     border-color 220ms ease,
@@ -226,10 +280,31 @@ body {
   color: rgba(255, 255, 255, 0.76);
 }
 
+.carousel-chip-image {
+  width: 3.35rem;
+  height: 3.35rem;
+  flex-shrink: 0;
+  border-radius: 1rem;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.carousel-chip-image-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.52);
+}
+
 .carousel-chip-active {
   border-color: rgba(var(--accent-rgb), 0.52);
   background: rgba(var(--accent-rgb), 0.12);
   color: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 0 0 1px rgba(var(--accent-rgb), 0.12);
 }
 
 .hero-glow {
@@ -563,6 +638,12 @@ body {
   }
 }
 
+@media (min-width: 768px) {
+  .featured-carousel-rail {
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+}
+
 @media (max-width: 1023px) {
   .hero-orbit-one,
   .hero-orbit-two,
@@ -630,5 +711,13 @@ body {
     width: min(16rem, calc(100% - 2rem));
     max-width: none;
     transform: translateX(-50%) !important;
+  }
+
+  .featured-carousel-stage {
+    padding: 0.45rem;
+  }
+
+  .carousel-chip {
+    border-radius: 1.1rem;
   }
 }
