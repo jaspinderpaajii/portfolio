@@ -4,6 +4,7 @@ import { fetchSiteSnapshot } from "../../api/publicApi.js";
 
 function Footer() {
   const [footerText, setFooterText] = useState("Crafted for premium storytelling and editable through the private CMS.");
+  const year = new Date().getFullYear();
 
   useEffect(() => {
     fetchSiteSnapshot()
@@ -17,22 +18,24 @@ function Footer() {
   }, []);
 
   return (
-    <footer className="relative z-10 border-t border-white/5">
-      <div className="shell flex flex-col gap-4 py-8 text-sm text-white/50 md:flex-row md:items-center md:justify-between">
-        <p>{footerText}</p>
-        <div className="flex flex-wrap gap-5">
-          <Link to="/" className="transition hover:text-white">
-            Home
-          </Link>
-          <Link to="/projects" className="transition hover:text-white">
-            Projects
-          </Link>
-          <Link to="/creative" className="transition hover:text-white">
-            Creative
-          </Link>
-          <Link to="/contact" className="transition hover:text-white">
-            Contact
-          </Link>
+    <footer className="public-footer relative z-10">
+      <div className="shell py-8">
+        <div className="footer-build-module">
+          <div className="footer-build-rail" aria-hidden="true">
+            <span />
+            <span />
+          </div>
+          <div className="footer-build-copy">
+            <span>Build complete</span>
+            <p>{footerText}</p>
+            <small>© {year} Aryan Verma</small>
+          </div>
+          <nav className="footer-build-nav" aria-label="Footer">
+            <Link to="/">Home</Link>
+            <Link to="/projects">Projects</Link>
+            <Link to="/creative">Creative</Link>
+            <Link to="/contact">Contact</Link>
+          </nav>
         </div>
       </div>
     </footer>

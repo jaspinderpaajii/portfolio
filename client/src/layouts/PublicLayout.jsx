@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Footer from "../components/public/Footer.jsx";
 import Navbar from "../components/public/Navbar.jsx";
+import PageBuildRig from "../components/public/PageBuildRig.jsx";
 
 function PublicLayout() {
   const location = useLocation();
@@ -14,22 +15,20 @@ function PublicLayout() {
   }, [location.pathname]);
 
   return (
-    <div className="ambient-bg relative min-h-screen overflow-hidden">
+    <div className="ambient-bg relative min-h-screen overflow-x-hidden">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 opacity-45">
+        <div className="ambient-ribbons absolute inset-0" />
+        <div className="ambient-sheen absolute inset-0" />
+        <div className="absolute inset-0 opacity-55">
           <div className="grid-fade absolute inset-0" />
         </div>
+        <div className="factory-spine factory-spine-left" />
+        <div className="factory-spine factory-spine-right" />
+        <div className="factory-bolt-trail factory-bolt-trail-left" />
+        <div className="factory-bolt-trail factory-bolt-trail-right" />
         <div className="noise-overlay absolute inset-0" />
-        <div className="hero-glow animate-drift absolute left-[-8rem] top-24 h-72 w-72 rounded-full opacity-38" />
-        <div
-          className="absolute right-[-6rem] top-36 h-80 w-80 rounded-full opacity-16"
-          style={{ background: "radial-gradient(circle at center, rgba(118, 188, 255, 0.22), transparent 68%)" }}
-        />
-        <div
-          className="absolute bottom-[-8rem] left-1/3 h-96 w-96 rounded-full opacity-14"
-          style={{ background: "radial-gradient(circle at center, rgba(var(--accent-rgb), 0.18), transparent 70%)" }}
-        />
       </div>
+      <PageBuildRig />
       <Navbar />
       <main className="relative z-10 pb-20">
         <div key={location.pathname} className={`route-stage ${stageVisible ? "route-stage-visible" : ""}`}>

@@ -1,10 +1,42 @@
-import { Sparkles } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
-function HeroDepthScene({ availability, heroStats = [], aboutBody, marquee = [] }) {
+const stickerPositions = [
+  { lat: -6, lon: 0 },
+  { lat: 24, lon: 48 },
+  { lat: -28, lon: 92 },
+  { lat: 32, lon: 146 },
+  { lat: -10, lon: 188 },
+  { lat: 18, lon: 236 },
+  { lat: -34, lon: 292 },
+  { lat: 8, lon: 328 }
+];
+
+function formatStatSticker(stat) {
+  if (!stat?.label && !stat?.value) return null;
+  return [stat.value, stat.label].filter(Boolean).join(" ");
+}
+
+function HeroDepthScene({ heroStats = [], marquee = [] }) {
   const [pointer, setPointer] = useState({ x: 50, y: 46 });
-  const featuredStats = useMemo(() => heroStats.slice(0, 3), [heroStats]);
-  const accentPills = useMemo(() => marquee.slice(0, 3), [marquee]);
+  const [sphereRotation, setSphereRotation] = useState({ x: -8, y: -24 });
+  const [isDraggingSphere, setIsDraggingSphere] = useState(false);
+  const dragRef = useRef(null);
+  const sphereStickers = useMemo(() => {
+    const labels = [
+      ...marquee,
+      ...heroStats.map(formatStatSticker),
+      "Portfolio OS",
+      "Interactive UI"
+    ]
+      .filter(Boolean)
+      .filter((item, index, list) => list.indexOf(item) === index)
+      .slice(0, stickerPositions.length);
+
+    return labels.map((label, index) => ({
+      label,
+      ...stickerPositions[index]
+    }));
+  }, [heroStats, marquee]);
 
   function handlePointerMove(event) {
     const bounds = event.currentTarget.getBoundingClientRect();
@@ -15,6 +47,56 @@ function HeroDepthScene({ availability, heroStats = [], aboutBody, marquee = [] 
 
   function resetPointer() {
     setPointer({ x: 50, y: 46 });
+  }
+
+  function handleSpherePointerDown(event) {
+    event.preventDefault();
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startClientX: event.clientX,
+      startClientY: event.clientY,
+      startRotationX: sphereRotation.x,
+      startRotationY: sphereRotation.y
+    };
+    setIsDraggingSphere(true);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function handleSpherePointerMove(event) {
+    if (!dragRef.current || dragRef.current.pointerId !== event.pointerId) return;
+
+    const deltaX = event.clientX - dragRef.current.startClientX;
+    const deltaY = event.clientY - dragRef.current.startClientY;
+    setSphereRotation({
+      x: dragRef.current.startRotationX - deltaY * 0.62,
+      y: dragRef.current.startRotationY + deltaX * 0.62
+    });
+  }
+
+  function stopSphereDrag(event) {
+    if (!dragRef.current || dragRef.current.pointerId !== event.pointerId) return;
+    dragRef.current = null;
+    setIsDraggingSphere(false);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  }
+
+  function handleSphereKeyDown(event) {
+    const step = event.shiftKey ? 28 : 14;
+    const keyRotation = {
+      ArrowUp: { x: -step, y: 0 },
+      ArrowDown: { x: step, y: 0 },
+      ArrowLeft: { x: 0, y: -step },
+      ArrowRight: { x: 0, y: step }
+    }[event.key];
+
+    if (!keyRotation) return;
+    event.preventDefault();
+    setSphereRotation((current) => ({
+      x: current.x + keyRotation.x,
+      y: current.y + keyRotation.y
+    }));
   }
 
   const tiltX = (50 - pointer.y) / 11;
@@ -28,6 +110,11 @@ function HeroDepthScene({ availability, heroStats = [], aboutBody, marquee = [] 
     transform: `translate3d(${(pointer.x - 50) / 5}px, ${(pointer.y - 50) / 7}px, 0)`
   };
 
+  const sphereStyle = {
+    "--sphere-rotate-x": `${sphereRotation.x + (50 - pointer.y) / 10}deg`,
+    "--sphere-rotate-y": `${sphereRotation.y + (pointer.x - 50) / 10}deg`
+  };
+
   const orbitStyle = {
     transform: `translate3d(${(pointer.x - 50) / 8}px, ${(pointer.y - 50) / 10}px, 0)`
   };
@@ -37,71 +124,87 @@ function HeroDepthScene({ availability, heroStats = [], aboutBody, marquee = [] 
   };
 
   return (
-    <div className="hero-depth relative min-h-[30rem] md:min-h-[35rem]" onMouseMove={handlePointerMove} onMouseLeave={resetPointer}>
+    <div className="hero-depth relative min-h-[26rem] md:min-h-[31rem]" onMouseMove={handlePointerMove} onMouseLeave={resetPointer}>
+      <span className="build-arm-target build-arm-target-right" aria-hidden="true" />
+      <span className="handoff-payload handoff-payload-hero-sphere" aria-hidden="true">
+        <i />
+        <b />
+        <b />
+      </span>
       <div className="hero-depth-stage" style={stageStyle}>
         <div className="hero-depth-spotlight" style={spotlightStyle} />
         <div className="hero-grid-plane" />
+        <div className="hero-assembly-gantry" aria-hidden="true">
+          <span />
+          <span />
+          <i />
+        </div>
         <div className="hero-orbit hero-orbit-one" style={orbitStyle} />
         <div className="hero-orbit hero-orbit-two" style={orbitStyle} />
 
         <div className="hero-orb-shell-wrap" style={orbStyle}>
-          <div className="hero-orb-glow" />
-          <div className="hero-orb-shell">
-            <div className="hero-orb-core" />
-            <div className="hero-orb-highlight" />
+          <div className="hero-orb-seat" aria-hidden="true" />
+          <div className="hero-orb-inspection-frame" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
           </div>
-        </div>
-
-        <div
-          className="hero-floating-card hero-floating-card-primary hidden md:block"
-          style={{ transform: `translate3d(${(pointer.x - 50) / 12}px, ${(pointer.y - 50) / 10}px, 28px)` }}
-        >
-          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-white/42">
-            <Sparkles size={14} className="text-[var(--accent)]" />
-            Availability
+          <div className="hero-orb-tethers" aria-hidden="true">
+            <span />
+            <span />
           </div>
-          <p className="mt-3 text-sm leading-7 text-white/72">
-            {availability || "Open to building thoughtful digital work."}
-          </p>
-        </div>
-
-        <div
-          className="hero-floating-card hero-floating-card-secondary"
-          style={{ transform: `translate3d(${(50 - pointer.x) / 10}px, ${(pointer.y - 50) / 11}px, 44px)` }}
-        >
-          <p className="text-[0.68rem] uppercase tracking-[0.24em] text-white/35">About Snapshot</p>
-          <p className="mt-4 max-h-[11rem] overflow-hidden text-sm leading-7 text-white/68">
-            {aboutBody || "A more visual way to frame the technical and creative direction behind the portfolio."}
-          </p>
-        </div>
-
-        {featuredStats.map((stat, index) => (
           <div
-            key={stat.label}
-            className={`hero-floating-card hero-stat-card hero-stat-card-${index + 1}`}
-            style={{
-              transform: `translate3d(${((index % 2 === 0 ? 1 : -1) * (pointer.x - 50)) / 12}px, ${((pointer.y - 50) * (index + 1)) / 24}px, ${32 + index * 12}px)`
-            }}
+            className="hero-orb-sphere"
+            data-dragging={isDraggingSphere ? "true" : "false"}
+            role="button"
+            tabIndex={0}
+            aria-label="Rotate portfolio sphere"
+            style={sphereStyle}
+            onPointerDown={handleSpherePointerDown}
+            onPointerMove={handleSpherePointerMove}
+            onPointerUp={stopSphereDrag}
+            onPointerCancel={stopSphereDrag}
+            onKeyDown={handleSphereKeyDown}
           >
-            <p className="text-[0.64rem] uppercase tracking-[0.22em] text-white/35">{stat.label}</p>
-            <p className="mt-4 font-display text-3xl leading-none text-white">{stat.value}</p>
-          </div>
-        ))}
-
-        {accentPills.length ? (
-          <div
-            className="hero-floating-card hero-floating-card-tags hidden lg:flex"
-            style={{ transform: `translate3d(${(pointer.x - 50) / 13}px, ${(50 - pointer.y) / 10}px, 36px)` }}
-          >
-            <div className="flex flex-wrap gap-2">
-              {accentPills.map((item) => (
-                <span key={item} className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-[0.68rem] text-white/58">
-                  {item}
-                </span>
-              ))}
+            <div className="hero-orb-glow" />
+            <div className="hero-orb-shell">
+              <div className="hero-orb-core" />
+              <div className="hero-orb-surface" style={sphereStyle}>
+                <div className="hero-orb-grid" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </div>
+                <div className="hero-orb-sticker-field" aria-hidden="true">
+                  {sphereStickers.map((sticker) => (
+                    <span
+                      className="hero-orb-sticker"
+                      key={sticker.label}
+                      style={{
+                        "--sticker-lat": `${sticker.lat}deg`,
+                        "--sticker-lon": `${sticker.lon}deg`
+                      }}
+                    >
+                      {sticker.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="hero-orb-highlight" />
             </div>
           </div>
-        ) : null}
+          <div className="hero-orb-cradle" aria-hidden="true">
+            <span />
+            <span />
+            <i />
+            <b />
+          </div>
+        </div>
+
       </div>
     </div>
   );

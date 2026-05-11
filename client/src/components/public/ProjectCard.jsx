@@ -35,8 +35,15 @@ function ProjectCard({ project, className = "", variant = "default" }) {
                 "aria-label": `Open ${project.title}`
               }
             : {})}
-          className="featured-media-card relative block overflow-hidden rounded-[1.65rem] border border-white/10 bg-white/5"
+          className="featured-media-card media-slab-card relative block overflow-hidden rounded-[1.2rem] border border-white/10 bg-white/5"
         >
+          <div className="media-slab-depth-edge" aria-hidden="true" />
+          <div className="media-slab-locks" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
           {coverImageUrl ? (
             <>
               <img
@@ -44,7 +51,7 @@ function ProjectCard({ project, className = "", variant = "default" }) {
                 alt={project.title}
                 className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#07090d] via-transparent to-transparent opacity-75" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#07090d] via-[#07090d]/10 to-transparent opacity-82" />
             </>
           ) : (
             <div className="flex h-full items-end bg-gradient-to-br from-white/10 via-white/[0.04] to-[rgba(var(--accent-rgb),0.18)] p-5">
@@ -59,6 +66,10 @@ function ProjectCard({ project, className = "", variant = "default" }) {
               <ArrowUpRight size={18} />
             </div>
           ) : null}
+          <div className="absolute inset-x-4 bottom-4">
+            <p className="max-w-xl font-display text-3xl leading-none text-white drop-shadow md:text-[2.35rem]">{project.title}</p>
+            {project.summary ? <p className="mt-2 line-clamp-2 max-w-2xl text-sm leading-6 text-white/66">{project.summary}</p> : null}
+          </div>
         </MediaTag>
       </article>
     );
@@ -67,7 +78,7 @@ function ProjectCard({ project, className = "", variant = "default" }) {
   return (
     <article className={`glass-panel section-frame interactive-tilt group relative overflow-hidden p-5 md:p-6 ${className}`}>
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(var(--accent-rgb),0.92)] to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />
-      <div className="mb-6 overflow-hidden rounded-[1.65rem] border border-white/10 bg-white/5">
+      <div className="mb-6 overflow-hidden rounded-[1.2rem] border border-white/10 bg-white/5">
         {coverImageUrl ? (
           <div className="relative">
             <img
@@ -75,7 +86,7 @@ function ProjectCard({ project, className = "", variant = "default" }) {
               alt={project.title}
               className="h-56 w-full object-cover transition duration-700 group-hover:scale-[1.05]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#07090d] via-transparent to-transparent opacity-70" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#07090d] via-transparent to-transparent opacity-76" />
             <div className="absolute left-4 top-4 rounded-full border border-white/10 bg-black/35 px-3 py-1 text-[0.68rem] uppercase tracking-[0.22em] text-white/70 backdrop-blur-md">
               {project.category}
             </div>

@@ -16,10 +16,10 @@ function NavItems({ onClick }) {
       to={link.path}
       onClick={onClick}
       className={({ isActive }) =>
-        `rounded-full px-4 py-2 text-sm transition ${
+        `rounded-full px-4 py-2 text-sm font-medium transition ${
           isActive
-            ? "border border-white/10 bg-white/[0.08] text-white shadow-[0_0_0_1px_rgba(255,255,255,0.04)]"
-            : "text-white/60 hover:bg-white/[0.05] hover:text-white"
+            ? "border border-white/10 bg-white/[0.1] text-white shadow-[0_0_0_1px_rgba(255,255,255,0.04)]"
+            : "text-white/58 hover:bg-white/[0.055] hover:text-white"
         }`
       }
     >
@@ -41,13 +41,16 @@ function Navbar() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-30 border-b border-white/5 bg-[#07090d]/55 backdrop-blur-2xl">
-      <div className="shell flex items-center justify-between py-5">
-        <Link to="/" className="font-display text-3xl tracking-tight text-white">
-          {siteName}
+    <header className="sticky top-0 z-30 border-b border-white/5 bg-[#07090d]/70 backdrop-blur-2xl">
+      <div className="shell flex items-center justify-between py-4">
+        <Link to="/" className="group inline-flex items-center gap-3 text-white">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] font-display text-xl transition group-hover:border-[rgba(var(--accent-rgb),0.5)]">
+            {siteName.slice(0, 1)}
+          </span>
+          <span className="font-display text-3xl tracking-tight">{siteName}</span>
         </Link>
 
-        <nav className="hidden items-center gap-3 rounded-full border border-white/10 bg-white/[0.03] p-2 md:flex">
+        <nav className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] p-1.5 shadow-[0_18px_60px_rgba(0,0,0,0.22)] md:flex">
           <NavItems />
           <Link to="/contact" className="public-button py-2.5">
             Start a conversation
@@ -56,8 +59,9 @@ function Navbar() {
 
         <button
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 md:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] md:hidden"
           onClick={() => setOpen((current) => !current)}
+          aria-label="Toggle navigation"
         >
           {open ? <X size={18} /> : <Menu size={18} />}
         </button>
